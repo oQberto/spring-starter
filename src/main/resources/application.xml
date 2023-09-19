@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/sprinfg-beans.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:property-placeholder location="application.properties"/>
+
+    <bean id="driver" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="${db.driver}"/>
+    </bean>
+
+    <bean id="connectionPool" class="org.example.spring.database.pool.ConnectionPool">
+        <constructor-arg name="username" value="${db.username}"/>
+        <constructor-arg name="size" value="${db.pool.size}"/>
+        <constructor-arg name="args">
+            <list>
+                <value>--arg1=value1</value>
+                <value>--arg2=value2</value>
+            </list>
+        </constructor-arg>
+
+<!--        #{...} - SpEL(Spring Expression Language). С его помощью можно вызывать
+                    любой bean или писать java код. #{driver.length() > 10 - тут будет выведено true,
+                    если длина строки bean driver больше 10.}-->
+
+        <constructor-arg name="properties">
+            <map>
+                <entry key="url" value="${db.url}"/>
+                <entry key="password" value="${db.password}"/>
+                <entry key="driver" value="#{driver}"/>
+                <entry key="hosts" value="#{'${db.host}'.split(',')}"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="companyRepository" class="org.example.spring.database.repository.CompanyRepository">
+        <constructor-arg name="connectionPool" ref="connectionPool"/>
+    </bean>
+</beans>
