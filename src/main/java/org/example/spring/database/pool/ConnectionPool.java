@@ -1,5 +1,7 @@
 package org.example.spring.database.pool;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -11,4 +13,14 @@ public class ConnectionPool {
     private final Integer size;
     private final List<Object> args;
     private final Map<String, Object> properties;
+
+    @PostConstruct
+    private void init() {
+        System.out.println("Init connection pool");
+    }
+
+    @PreDestroy
+    private void destroy() {
+        System.out.println("Clean Connection pool");
+    }
 }
