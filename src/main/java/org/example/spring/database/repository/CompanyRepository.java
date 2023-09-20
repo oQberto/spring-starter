@@ -6,6 +6,8 @@ import org.example.spring.bpp.InjectBean;
 import org.example.spring.bpp.Transaction;
 import org.example.spring.database.entity.Company;
 import org.example.spring.database.pool.ConnectionPool;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Optional;
 
@@ -13,8 +15,10 @@ import java.util.Optional;
 @Auditing
 public class CompanyRepository implements CrudRepository<Integer, Company> {
 
-    @InjectBean
-    private ConnectionPool connectionPool;
+    @Autowired
+    private ConnectionPool connectionPool; //если у нас имеется два несколько бинов, то spring будет искать нужный по имени переменной это помогает избежать использования @Qualifier
+    @Value("${db.pool.size}")
+    private Integer poolSize;
 
     @PostConstruct
     private void init() {
