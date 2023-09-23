@@ -1,14 +1,14 @@
 package org.example;
 
+import org.example.spring.config.ApplicationConfiguration;
 import org.example.spring.database.pool.ConnectionPool;
-import org.example.spring.database.repository.CompanyRepository;
 import org.example.spring.database.repository.CrudRepository;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ApplicationRunner {
 
     public static void main(String[] args) {
-        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application.xml")) {
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class)) {
             ConnectionPool connection = context.getBean("connectionPool", ConnectionPool.class);
             System.out.println(connection);
 
