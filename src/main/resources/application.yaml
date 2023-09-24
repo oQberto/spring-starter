@@ -1,5 +1,5 @@
 db:
-  #Если не будет передано значение userame.value, то будет подставлено дефолтное (после двлеточия)
+  #Если не будет передано значение username.value, то будет подставлено дефолтное (после двоеточия)
   username: ${username.value:postgres}
   password: postgres
   driver: PostgresDriver
