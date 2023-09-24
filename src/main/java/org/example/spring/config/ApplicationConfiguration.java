@@ -23,12 +23,12 @@ public class ApplicationConfiguration {
 
         @Bean
         @Scope(SCOPE_SINGLETON)
-        public ConnectionPool connectionPool() {
+        public ConnectionPool connectionPool1() {
                 return new ConnectionPool("test-name", 20);
         }
 
         @Bean
-        public UserRepository userRepository(ConnectionPool connectionPool) {
+        public UserRepository userRepository1(ConnectionPool connectionPool) {
                 return new UserRepository(connectionPool);
         }
 }
