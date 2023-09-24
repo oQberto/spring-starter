@@ -1,6 +1,7 @@
 package org.example.spring.database.repository;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.example.spring.bpp.Auditing;
 import org.example.spring.bpp.Transaction;
 import org.example.spring.database.entity.Company;
@@ -13,16 +14,13 @@ import java.util.Optional;
 @Repository
 @Transaction
 @Auditing
+@RequiredArgsConstructor
 public class CompanyRepository implements CrudRepository<Integer, Company> {
 
     private final ConnectionPool connectionPool; //если у нас имеется два несколько бинов, то spring будет искать нужный по имени переменной это помогает избежать использования @Qualifier
-    private final Integer poolSize;
 
-    public CompanyRepository(ConnectionPool connectionPool,
-                             @Value("${db.pool.size}") Integer poolSize) {
-        this.connectionPool = connectionPool;
-        this.poolSize = poolSize;
-    }
+    @Value("${db.pool.size}")
+    private final Integer poolSize;
 
     @PostConstruct
     private void init() {
