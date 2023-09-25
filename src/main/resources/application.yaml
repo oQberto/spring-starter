@@ -30,3 +30,7 @@ logging:
   level:
     root: WARN
     org.example.spring.database.pool.ConnectionPool: INFO
+  # Запись логов в файл
+  file:
+    name: spring-starter.log
+    path: /
