@@ -19,4 +19,14 @@ db:
       timeout: 2
     - size: 3
       timeout: 3
-  #spring.profiles.active=qa
+
+spring.profiles.active: qa
+
+# Подключение различных уровней логирования.
+# В данном примере для всех логеров будут выводиться только сообщения WARN типа,
+# а для ConnectionPool - INFO.
+# Также можно указать только имя пакета. И логирование будет применяться для всех классов в пакете.
+logging:
+  level:
+    root: WARN
+    org.example.spring.database.pool.ConnectionPool: INFO
