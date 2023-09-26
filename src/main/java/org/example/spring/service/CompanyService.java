@@ -1,11 +1,13 @@
 package org.example.spring.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.Company;
 import org.example.spring.database.repository.CrudRepository;
 import org.example.spring.dto.CompanyReadDto;
 import org.example.spring.listener.entity.EntityEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -28,21 +30,43 @@ import static org.example.spring.listener.entity.AccessType.READ;
  * <p>
  * Инъекция зависимостей: Классы, помеченные @Service, могут использовать другие аннотации Spring, такие, как @Autowired,
  * для инъекции зависимостей в свои поля, что упрощает управление зависимостями между компонентами.
+ * <p></p>
+ * {@code @Transactional} - это аннотация в Spring Framework, которая используется для управления транзакциями в приложениях,
+ * работающих с базами данных или другими ресурсами. Она позволяет определить, какие методы должны выполняться в рамках
+ * транзакции, и обеспечивает управление началом, фиксацией и откатом транзакций.
+ * <p>
+ * Основные характеристики и использование аннотации @Transactional:
+ * <p>
+ * Аннотация метода: @Transactional обычно применяется к методам, которые должны выполняться в рамках транзакции.
+ * Это означает, что все операции, выполняемые внутри этого метода, будут либо успешно зафиксированы, либо откачены в
+ * случае возникновения исключения.
+ * <p>
+ * Начало транзакции: Когда метод, помеченный @Transactional, вызывается, Spring автоматически начинает новую транзакцию.
+ * Транзакция остается активной до тех пор, пока метод завершается успешно.
+ * <p>
+ * Фиксация (Commit) и откат (Rollback): Если метод завершается успешно, транзакция автоматически фиксируется, и все
+ * изменения в базе данных сохраняются. В случае возникновения исключения, транзакция автоматически откатывается, и все
+ * изменения в базе данных сбрасываются.
+ * <p>
+ * Уровень изоляции и другие параметры: С помощью аннотации @Transactional вы можете настроить различные параметры
+ * транзакции, такие как уровень изоляции, тайм-аут, только для чтения и другие.
+ * <p>
+ * Пропагация транзакции: Вы также можете настроить, как будет обрабатываться транзакция, если метод вызывается из
+ * другого метода, уже выполняющегося в транзакции (например, методы могут присоединяться к существующей транзакции
+ * или создавать новую).
+ * <p></p>
+ * Если мы хотим, чтобы транзакция открывалась только для определенного метода, мы ставим аннотацию @Transactional
+ * над соответствующим методом. Если поставить @Transactional и над методом и над классом, то аннотация над методом
+ * будет иметь приоритет.
  */
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class CompanyService {
 
     private final UserService userService;
     private final CrudRepository<Integer, Company> companyRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    public CompanyService(UserService userService,
-                          CrudRepository<Integer, Company> companyRepository,
-                          ApplicationEventPublisher applicationEventPublisher) {
-        this.userService = userService;
-        this.companyRepository = companyRepository;
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     public Optional<CompanyReadDto> findById(Integer id) {
         return companyRepository.findById(id)

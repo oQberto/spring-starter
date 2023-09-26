@@ -36,3 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/spring-starter.log
+/spring-starter.log.2023-09-25.0.gz
