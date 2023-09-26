@@ -11,6 +11,54 @@ import java.util.Map;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+/**
+ * {@code @NamedQuery} - это аннотация в JPA (Java Persistence API), которая позволяет определить именованный запрос к базе данных внутри сущности (Entity) или в классе, связанном с этой сущностью. Именованные запросы позволяют предварительно определить SQL-запросы или JPQL-запросы (Java Persistence Query Language) и затем ссылаться на них из кода при работе с базой данных.
+ * <p>
+ * Вот как использовать @NamedQuery:
+ * <p>
+ * Определение именованного запроса в сущности:
+ * <p></p>
+ * {@code @Entity
+ * @NamedQuery( name = "Employee.findByLastName",
+ * query = "SELECT e FROM Employee e WHERE e.lastName = :lastName"
+ * )
+ * public class Employee {
+ * // Остальные поля и методы сущности
+ * }}
+ * <p></p>
+ * В этом примере мы определяем именованный запрос с именем "Employee.findByLastName". Запрос выполняет выборку
+ * сущностей Employee, у которых поле lastName совпадает с заданным параметром :lastName.
+ * <p>
+ * Использование именованного запроса в коде:
+ * <p></p>
+ * {@code TypedQuery<Employee> query = entityManager.createNamedQuery("Employee.findByLastName", Employee.class);
+ * query.setParameter("lastName", "Smith");
+ * List<Employee> employees = query.getResultList();}
+ * <p></p>
+ * В коде мы создаем объект TypedQuery, указываем имя именованного запроса "Employee.findByLastName" и передаем
+ * параметры, если они есть. Затем мы вызываем getResultList() для выполнения запроса и получения результата.
+ * <p>
+ * Преимущества использования @NamedQuery:
+ * <p>
+ * Улучшает читаемость кода: Именованные запросы делают код более читаемым, так как запросы вынесены из кода и легко
+ * доступны из других частей приложения.
+ * <p>
+ * Улучшает безопасность: Запросы, определенные с использованием @NamedQuery, проверяются и компилируются при запуске
+ * приложения, что повышает безопасность и уменьшает возможность ошибок в запросах.
+ * <p>
+ * Повышает производительность: Некоторые JPA-поставщики могут предварительно компилировать и кэшировать именованные
+ * запросы, что может повысить производительность.
+ * <p>
+ * Улучшает сопровождаемость: Именованные запросы легко поддерживать и изменять, поскольку они сосредоточены в одном
+ * месте.
+ * <p>
+ * Важно отметить, что @NamedQuery можно использовать не только для выборки данных (SELECT), но и для других операций,
+ * таких как вставка (INSERT) и обновление (UPDATE), если это поддерживается вашим JPA-поставщиком.
+ */
+@NamedQuery(
+        name = "Company.findByName",
+        query = "SELECT c FROM Company c WHERE LOWER(c.name) = LOWER(:name) "
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

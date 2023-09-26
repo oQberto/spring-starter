@@ -22,6 +22,12 @@ class CompanyRepositoryTest {
     private final CompanyRepository companyRepository;
 
     @Test
+    void checkFindByQueries() {
+        companyRepository.findByName("Google");
+        companyRepository.findAllByNameContainingIgnoreCase("a");
+    }
+
+    @Test
     void delete() {
         var company = Company.builder()
                 .name("Apple1")

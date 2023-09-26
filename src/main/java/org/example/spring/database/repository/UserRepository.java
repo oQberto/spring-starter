@@ -1,9 +1,10 @@
 package org.example.spring.database.repository;
 
-import lombok.RequiredArgsConstructor;
-import org.example.spring.database.pool.ConnectionPool;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Repository;
+import org.example.spring.database.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
  * {@code @Repository} - это аннотация в Spring Framework, которая используется для пометки класса как репозитория (хранилища)
@@ -24,26 +25,32 @@ import org.springframework.stereotype.Repository;
  * Интеграция с Spring Data: @Repository часто используется в сочетании с Spring Data, что позволяет создавать
  * репозитории с помощью интерфейсов и автоматически создавать реализацию этих репозиториев Spring Data.
  */
-@Repository
-@RequiredArgsConstructor
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * Аннотация @Qualifier является частью Spring Framework и используется для разрешения неоднозначности в инъекции
-     * зависимостей, когда в контейнере Spring существует несколько бинов одного типа и Spring не может самостоятельно
-     * определить, какой бин следует использовать. @Qualifier позволяет явно указать, какой бин должен быть инъектирован.
-     * <p>
-     * Основные характеристики и использование аннотации @Qualifier:
-     * <p>
-     * Разрешение конфликта зависимостей: Когда несколько бинов одного типа доступны для инъекции, @Qualifier позволяет
-     * выбрать конкретный бин, который должен быть инъектирован в поле, метод или конструктор.
-     * <p>
-     * Сочетание с другими аннотациями: @Qualifier обычно сочетается с аннотацией @Autowired или другими аннотациями
-     * внедрения зависимостей для уточнения, какой именно бин должен быть инъектирован.
-     * <p>
-     * Имя бина: @Qualifier принимает в качестве аргумента имя бина, который вы хотите инъектировать. Это имя должно
-     * соответствовать значению value атрибута @Component или другой аннотации, определяющей бин.
+     * Тут используется HQL
+     * @param firstname
+     * @param lastname
+     * @return
      */
-    @Qualifier("connectionPool2")
-    private final ConnectionPool connectionPool;
+    @Query(value = """
+            select u
+            from User u
+            where u.firstName like %:firstname% and
+                u.lastName like %:lastname%
+            """)
+    List<User> findAllBy(String firstname, String lastname);
+
+    /**
+     * Тут используется native SQL
+     * @param username
+     * @return
+     */
+    @Query(value = """
+            select u.*
+            from users u
+            where u.username = :username
+            """,
+            nativeQuery = true)
+    List<User> findAllByUsername(String username);
 }
