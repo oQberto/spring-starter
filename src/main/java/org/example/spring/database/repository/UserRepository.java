@@ -1,7 +1,9 @@
 package org.example.spring.database.repository;
 
 import org.example.spring.database.entity.User;
+import org.example.spring.database.entity.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Тут используется HQL
+     *
      * @param firstname
      * @param lastname
      * @return
@@ -42,7 +45,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllBy(String firstname, String lastname);
 
     /**
-     * Тут используется native SQL
+     * Тут используется native SQL.
+     * Прибегать к нативным запросам стоит только в том случае, когда не возможно сделать
+     * что-либо через HQL
+     *
      * @param username
      * @return
      */
@@ -53,4 +59,59 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """,
             nativeQuery = true)
     List<User> findAllByUsername(String username);
+
+    /**
+     * Аннотация @Modifying является частью Spring Data JPA и используется вместе с аннотацией @Query для обозначения
+     * метода, который выполняет модифицирующий (изменяющий) запрос к базе данных. Модифицирующие запросы включают в
+     * себя операции обновления (UPDATE), удаления (DELETE) и вставки (INSERT) данных в базу данных.
+     * <p>
+     * Когда вы объявляете метод в интерфейсе репозитория с аннотациями @Query и @Modifying, Spring Data JPA ожидает,
+     * что этот метод будет выполнять модифицирующий запрос, и он будет вызван внутри транзакции.
+     * <p>
+     * Важные моменты относительно использования @Modifying:
+     * <p>
+     * Транзакция: Метод, помеченный @Modifying, будет выполняться внутри транзакции. Это означает, что он будет
+     * оборачиваться в транзакцию, и любые изменения данных будут зафиксированы только после успешного завершения транзакции.
+     * <p>
+     * Возвращаемое значение: Метод должен возвращать int или void. Возвращаемое значение int указывает на количество
+     * измененных записей в базе данных.
+     * <p>
+     * Осторожность: При использовании @Modifying убедитесь, что ваш запрос правильно обновляет, удаляет или вставляет
+     * данные, и проверьте его на безопасность, чтобы избежать ошибок или непредвиденных изменений в данных.
+     * <p>
+     * Совместимость с конкретным JPA-поставщиком: Помните, что различные JPA-поставщики могут иметь свои собственные
+     * особенности и требования к выполнению модифицирующих запросов. Убедитесь, что ваш запрос совместим с используемым
+     * JPA-поставщиком (например, Hibernate, EclipseLink и т. д.).
+     * <p></p>
+     * Описание параметров @Modifying:
+     * <p>
+     * clearAutomatically (по умолчанию: false): Этот параметр определяет, будет ли автоматически сбрасываться кеш
+     * (кэшированные объекты) EntityManager после выполнения модифицирующего запроса. Если значение установлено в true,
+     * то EntityManager будет очищен после выполнения запроса. Это может быть полезным, если важно убедиться, что
+     * кэшированные данные обновляются после модификации данных в базе.
+     * <p>
+     * flushAutomatically (по умолчанию: true): Этот параметр определяет, будет ли автоматически сбрасываться
+     * EntityManager в базу данных после выполнения модифицирующего запроса. Если значение установлено в true, то
+     * EntityManager будет автоматически сброшен (flushed) в базу данных после выполнения запроса. Это гарантирует,
+     * что все изменения данных будут сразу же отправлены в базу данных.
+     * <p>
+     * batchSize (по умолчанию: 0): Этот параметр позволяет настроить размер пакета (batch size) для выполнения
+     * модифицирующих операций. Если значение установлено больше 0, то операции будут выполнены пакетами указанного
+     * размера. Это может быть полезно для оптимизации производительности при выполнении большого количества
+     * модифицирующих операций.
+     *
+     * @param role
+     * @param ids
+     * @return
+     */
+    @Modifying(
+            clearAutomatically = true,
+            flushAutomatically = true
+    )
+    @Query(value = """
+            update User u
+            set u.role = :role
+            where u.id in (:ids)
+            """)
+    int updateRole(Role role, Long... ids);
 }
