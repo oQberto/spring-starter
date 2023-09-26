@@ -1,8 +1,7 @@
 package org.example.spring.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.spring.database.entity.Company;
-import org.example.spring.database.repository.CrudRepository;
+import org.example.spring.database.repository.CompanyRepository;
 import org.example.spring.dto.CompanyReadDto;
 import org.example.spring.listener.entity.EntityEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -65,7 +64,7 @@ import static org.example.spring.listener.entity.AccessType.READ;
 public class CompanyService {
 
     private final UserService userService;
-    private final CrudRepository<Integer, Company> companyRepository;
+    private final CompanyRepository companyRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public Optional<CompanyReadDto> findById(Integer id) {

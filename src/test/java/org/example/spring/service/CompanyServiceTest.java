@@ -1,7 +1,7 @@
 package org.example.spring.service;
 
 import org.example.spring.database.entity.Company;
-import org.example.spring.database.repository.CrudRepository;
+import org.example.spring.database.repository.CompanyRepository;
 import org.example.spring.dto.CompanyReadDto;
 import org.example.spring.listener.entity.EntityEvent;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class CompanyServiceTest {
     @Mock
     private UserService userService;
     @Mock
-    private CrudRepository<Integer, Company> companyRepository;
+    private CompanyRepository companyRepository;
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
     @InjectMocks
