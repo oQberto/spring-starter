@@ -34,6 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Пропагация транзакции: Вы также можете настроить, как будет обрабатываться транзакция, если метод вызывается из
  * другого метода, уже выполняющегося в транзакции (например, методы могут присоединяться к существующей транзакции
  * или создавать новую).
+ *<p></p>
+ * По умолчанию стоит аннотация @Rollback, для того, чтобы тесты не мешали друг другу. Но при желании
+ * можно установить аннотацию @Commit, если у нас реализован свой механизм очистки, после выполнения методов.
  */
 @IT
 @RequiredArgsConstructor
@@ -48,9 +51,5 @@ class CompanyRepositoryTest {
 
         assertNotNull(actualResult);
         assertThat(actualResult.getLocales()).hasSize(2);
-    }
-
-    @Test
-    void delete() {
     }
 }
