@@ -10,6 +10,7 @@ import org.example.spring.database.pool.ConnectionPool;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -68,7 +69,7 @@ public class CompanyRepository implements CrudRepository<Integer, Company> {
     @Override
     public Optional<Company> findById(Integer id) {
         log.info("find by id method");
-        return Optional.of(new Company(id));
+        return Optional.of(new Company(id, null, Collections.emptyMap()));
     }
 
     @Override

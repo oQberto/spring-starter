@@ -28,9 +28,24 @@ spring.profiles.active: qa
 # Также можно указать только имя пакета. И логирование будет применяться для всех классов в пакете.
 logging:
   level:
-    root: WARN
+    root: INFO
     org.example.spring.database.pool.ConnectionPool: INFO
   # Запись логов в файл
   file:
     name: spring-starter.log
     path: /
+# Подключение к БД. Стандартный пул - HikariCP.
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgres
+    username: postgres
+    password: pass
+    driver-class-name: org.postgresql.Driver
+# Для настройки JPA конфигурации используется spring.jpa
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: validate
