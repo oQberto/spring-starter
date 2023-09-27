@@ -2,6 +2,7 @@ package org.example.spring.database.repository;
 
 import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -98,12 +99,40 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * постраничный вывод результатов запросов. Они позволяют разбить результаты на страницы и получать только
      * необходимую часть данных, что может повысить производительность и улучшить опыт пользователя.
      * <p>
+     * Page - это объект в Spring Data, предназначенный для хранения и предоставления постраничных результатов запросов
+     * к базе данных. Он содержит список элементов данных, метаинформацию о странице (такую как общее количество
+     * элементов и количество страниц) и информацию о сортировке. Page используется для управления и представления
+     * отдельной страницы данных.
+     * <p>
+     * Основные элементы Page включают в себя:
+     * <p>
+     * Контент (Content): Это список элементов данных, представляющих текущую страницу результатов.
+     * <p>
+     * Номер страницы (Page Number): Это номер текущей страницы. Нумерация страниц начинается с 0.
+     * <p>
+     * Размер страницы (Page Size): Это количество элементов данных, которые отображаются на одной странице.
+     * <p>
+     * Общее количество элементов (Total Elements): Это общее количество элементов данных, доступных в результате запроса.
+     * <p>
+     * Общее количество страниц (Total Pages): Это общее количество страниц, на которые можно разделить результаты
+     * запроса в соответствии с размером страницы.
+     * <p>
+     * Сортировка (Sorting): Это информация о сортировке результатов, если она была задана.
      *
      * @param pageable
      * @return
      * @see org.example.spring.database.repository.UserRepositoryTest#checkSortUsingPageable()
      */
-    List<User> findAllBy(Pageable pageable);
+    @Query(
+            value = """
+                    select u
+                    from User u
+                    """,
+            countQuery = """
+                    select count(distinct u.firstName)
+                    from User u
+                    """)
+    Page<User> findAllBy(Pageable pageable);
 
     /**
      * Аннотация @Modifying является частью Spring Data JPA и используется вместе с аннотацией @Query для обозначения

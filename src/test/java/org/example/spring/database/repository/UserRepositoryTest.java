@@ -5,6 +5,7 @@ import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
 import org.example.spring.integration.annotation.IT;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -24,7 +25,7 @@ class UserRepositoryTest {
     void checkSortUsingPageable() {
         PageRequest pageable = PageRequest.of(1, 2, Sort.by("id"));
 
-        List<User> result = userRepository.findAllBy(pageable);
+        Page<User> result = userRepository.findAllBy(pageable);
         assertThat(result).hasSize(2);
     }
 
