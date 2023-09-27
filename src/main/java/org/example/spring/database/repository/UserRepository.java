@@ -2,11 +2,15 @@ package org.example.spring.database.repository;
 
 import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@code @Repository} - это аннотация в Spring Framework, которая используется для пометки класса как репозитория (хранилища)
@@ -59,6 +63,47 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """,
             nativeQuery = true)
     List<User> findAllByUsername(String username);
+
+    Optional<User> findFirstByOrderByIdDesc();
+
+    /**
+     * Sort - это объект из Spring Data, который используется для задания сортировки результатов запросов к базе данных.
+     * Он предоставляет удобный способ управления порядком, в котором данные будут возвращаться из базы данных.
+     * Sort может использоваться совместно с запросами Spring Data JPA для определения порядка сортировки результатов.
+     * <p>
+     * Основные элементы Sort включают в себя:
+     * <p>
+     * Свойство (Property): Это поле (или свойство) сущности, по которому будет выполняться сортировка.
+     * <p>
+     * Направление сортировки (Direction): Это определяет порядок сортировки для свойства. Направление может быть
+     * восходящим (ASC) или нисходящим (DESC).
+     *
+     * @param birthday
+     * @param sort
+     * @return
+     * @see org.example.spring.database.repository.UserRepositoryTest#checkSort()
+     * @see org.example.spring.database.repository.UserRepositoryTest#checkSortDefault()
+     */
+    List<User> findFirst3ByBirthDate(LocalDate birthday, Sort sort);
+
+    /**
+     * Pageable - это интерфейс в Spring Data, который предоставляет абстракцию для запросов, связанных с постраничным
+     * выводом данных из базы данных. Он позволяет определить параметры для запроса, такие как номер страницы, размер
+     * страницы и порядок сортировки. Pageable используется для разделения результатов запроса на страницы и управления ими.
+     * <p>
+     * PageRequest - это одна из реализаций интерфейса Pageable в Spring Data. Он предоставляет удобный способ создания
+     * объекта Pageable с указанием номера страницы, размера страницы и сортировки.
+     * <p>
+     * Pageable и PageRequest очень полезны для работы с большими объемами данных, когда необходимо выполнять
+     * постраничный вывод результатов запросов. Они позволяют разбить результаты на страницы и получать только
+     * необходимую часть данных, что может повысить производительность и улучшить опыт пользователя.
+     * <p>
+     *
+     * @param pageable
+     * @return
+     * @see org.example.spring.database.repository.UserRepositoryTest#checkSortUsingPageable()
+     */
+    List<User> findAllBy(Pageable pageable);
 
     /**
      * Аннотация @Modifying является частью Spring Data JPA и используется вместе с аннотацией @Query для обозначения
