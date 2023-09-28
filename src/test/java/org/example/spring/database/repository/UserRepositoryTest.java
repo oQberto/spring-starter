@@ -3,6 +3,7 @@ package org.example.spring.database.repository;
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
+import org.example.spring.dto.PersonalInfoInterface;
 import org.example.spring.integration.annotation.IT;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor
 class UserRepositoryTest {
     private final UserRepository userRepository;
+
+    @Test
+    void checkProjections() {
+        List<PersonalInfoInterface> users = userRepository.findAllByCompanyId(1);
+        System.out.println();
+    }
 
     @Test
     void checkPageable() {

@@ -2,6 +2,8 @@ package org.example.spring.database.repository;
 
 import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
+import org.example.spring.dto.PersonalInfo;
+import org.example.spring.dto.PersonalInfoInterface;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -190,4 +192,59 @@ public interface UserRepository extends JpaRepository<User, Long> {
             where u.id in (:ids)
             """)
     int updateRole(Role role, Long... ids);
+
+    /**
+     * Projection (проекция) - это механизм в Spring Data JPA, который позволяет выбирать только определенные
+     * атрибуты или свойства сущностей из базы данных, вместо загрузки всей сущности целиком. Проекции полезны,
+     * когда вы хотите получить только часть данных из сущности, что может повысить производительность и снизить
+     * нагрузку на базу данных.
+     * <p>
+     * В Spring Data JPA проекции могут быть реализованы несколькими способами:
+     * <p>
+     * Использование интерфейсов:
+     * Вы можете определить интерфейс, который содержит методы-геттеры для выбранных атрибутов сущности.
+     * Spring Data JPA будет автоматически создавать реализацию этого интерфейса и выполнить соответствующий SQL-запрос,
+     * чтобы извлечь только указанные атрибуты из базы данных.
+     * <p>
+     * Использование DTO (Data Transfer Object):
+     * Вы можете создать отдельный класс (DTO), который содержит только необходимые атрибуты и свойства, а затем
+     * использовать конструкторы или библиотеки маппинга (например, ModelMapper) для преобразования результатов
+     * запроса в объекты DTO.
+     * <p>
+     * Использование конструкторов сущностей:
+     * Если в ваших сущностях имеются конструкторы, которые принимают только необходимые атрибуты, вы можете
+     * использовать их для создания объектов сущностей с выбранными атрибутами.
+     * <p>
+     * Проекции позволяют оптимизировать запросы к базе данных и уменьшить объем передаваемых данных, что может
+     * быть особенно полезно при работе с большими объемами данных или при использовании REST API для передачи данных
+     * на клиентскую сторону.
+     * <p>
+     * Однако стоит помнить, что проекции могут уменьшить уровень абстракции и типобезопасность, которые предоставляет
+     * JPA, поэтому их следует использовать там, где это действительно необходимо для оптимизации производительности.
+     *
+     * @param companyId
+     * @return
+     * @see PersonalInfo
+     */
+//    List<PersonalInfo> findAllByCompanyId(Integer companyId);
+
+    /**
+     * Дженерик проекция
+     *
+     * @param companyId
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    <T> List<T> findAllByCompanyId(Integer companyId, Class<T> clazz);
+
+    @Query(value = """
+            select
+            firstname firstName,
+            lastname lastName,
+            birth_date birthDate
+            from users
+            where company_id = :companyId
+            """ ,nativeQuery = true)
+    List<PersonalInfoInterface> findAllByCompanyId(Integer companyId);
 }
