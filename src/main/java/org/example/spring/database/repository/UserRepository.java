@@ -5,6 +5,7 @@ import org.example.spring.database.entity.enums.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -123,6 +124,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return
      * @see org.example.spring.database.repository.UserRepositoryTest#checkSortUsingPageable()
      */
+    @EntityGraph(attributePaths = {"company"})
     @Query(
             value = """
                     select u

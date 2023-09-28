@@ -22,6 +22,18 @@ class UserRepositoryTest {
     private final UserRepository userRepository;
 
     @Test
+    void checkPageable() {
+        var pageRequest = PageRequest.of(0, 2, Sort.by("id"));
+        var slice = userRepository.findAllBy(pageRequest);
+        slice.forEach(user -> System.out.println(user.getCompany().getName()));
+
+        while (slice.hasNext()) {
+            slice = userRepository.findAllBy(slice.nextPageable());
+            slice.forEach(user -> System.out.println(user.getCompany().getName()));
+        }
+    }
+
+    @Test
     void checkSortUsingPageable() {
         PageRequest pageable = PageRequest.of(1, 2, Sort.by("id"));
 

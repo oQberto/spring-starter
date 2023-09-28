@@ -12,6 +12,9 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+@NamedEntityGraph(
+        name = "User.company",
+        attributeNodes = @NamedAttributeNode("company"))
 @Data
 @ToString(exclude = "userChats")
 @EqualsAndHashCode(of = "username")
