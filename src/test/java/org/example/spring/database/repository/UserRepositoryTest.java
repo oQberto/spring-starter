@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
 import org.example.spring.dto.PersonalInfoInterface;
+import org.example.spring.dto.UserFilterDto;
 import org.example.spring.integration.annotation.IT;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor
 class UserRepositoryTest {
     private final UserRepository userRepository;
+
+    @Test
+    void checkCustomImplementation() {
+        UserFilterDto filter = new UserFilterDto(
+                null,
+                "%ov%",
+                LocalDate.now()
+        );
+        List<User> allByFilter = userRepository.findAllByFilter(filter);
+        System.out.println();
+    }
 
     @Test
     void checkProjections() {

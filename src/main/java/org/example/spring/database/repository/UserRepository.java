@@ -35,7 +35,7 @@ import java.util.Optional;
  * Интеграция с Spring Data: @Repository часто используется в сочетании с Spring Data, что позволяет создавать
  * репозитории с помощью интерфейсов и автоматически создавать реализацию этих репозиториев Spring Data.
  */
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository {
 
     /**
      * Тут используется HQL
