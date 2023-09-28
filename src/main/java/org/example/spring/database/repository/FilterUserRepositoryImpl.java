@@ -27,13 +27,13 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
         List<Predicate> predicates = new ArrayList<>();
 
         if (userFilterDto.firstName() != null) {
-            predicates.add(criteriaBuilder.like(user.get("firstname"), userFilterDto.firstName()));
+            predicates.add(criteriaBuilder.like(user.get("firstName"), userFilterDto.firstName()));
         }
         if (userFilterDto.lastName() != null) {
-            predicates.add(criteriaBuilder.like(user.get("lastname"), userFilterDto.lastName()));
+            predicates.add(criteriaBuilder.like(user.get("lastName"), userFilterDto.lastName()));
         }
         if (userFilterDto.birthDate() != null) {
-            predicates.add(criteriaBuilder.lessThan(user.get("birthdate"), userFilterDto.birthDate()));
+            predicates.add(criteriaBuilder.lessThan(user.get("birthDate"), userFilterDto.birthDate()));
         }
         criteria.where(predicates.toArray(Predicate[]::new));
 
