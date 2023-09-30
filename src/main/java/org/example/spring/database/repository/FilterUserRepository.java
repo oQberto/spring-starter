@@ -1,6 +1,8 @@
 package org.example.spring.database.repository;
 
 import org.example.spring.database.entity.User;
+import org.example.spring.database.entity.enums.Role;
+import org.example.spring.dto.PersonalInfo;
 import org.example.spring.dto.UserFilterDto;
 
 import java.util.List;
@@ -41,4 +43,6 @@ import java.util.List;
 public interface FilterUserRepository {
 
     List<User> findAllByFilter(UserFilterDto userFilterDto);
+
+    List<PersonalInfo> findAllByCompanyIdAndRole(Integer companyId, Role role);
 }

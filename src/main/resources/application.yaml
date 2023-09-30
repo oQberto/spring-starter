@@ -30,6 +30,7 @@ logging:
   level:
     root: INFO
     org.example.spring.database.pool.ConnectionPool: INFO
+    org.springframework.jdbc.core: TRACE
   # Запись логов в файл
   file:
     name: spring-starter.log
