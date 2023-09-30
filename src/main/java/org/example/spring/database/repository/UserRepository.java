@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.history.RevisionRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +36,10 @@ import java.util.Optional;
  * Интеграция с Spring Data: @Repository часто используется в сочетании с Spring Data, что позволяет создавать
  * репозитории с помощью интерфейсов и автоматически создавать реализацию этих репозиториев Spring Data.
  */
-public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository {
+public interface UserRepository extends
+        JpaRepository<User, Long>,
+        FilterUserRepository,
+        RevisionRepository<User, Long, Integer> {
 
     /**
      * Тут используется HQL
