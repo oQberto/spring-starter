@@ -26,6 +26,12 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
             WHERE company_id = ?
                 AND role = ?
             """;
+    private static final String UPDATE_COMPANY_AND_ROLE = """
+            UPDATE users
+            SET company_id = ?,
+                role = ?
+            WHERE id = ?
+            """;
 
     private final EntityManager entityManager;
 
@@ -90,5 +96,16 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
                         rs.getDate("birth_date").toLocalDate()
                 ),
                 companyId, role.name());
+    }
+
+    @Override
+    public void updateCompanyAndRole(List<User> users) {
+        List<Object[]> args = users.stream()
+                .map(user -> new Object[]{user.getCompany().getId(), user.getRole().name(), user.getId()})
+                .toList();
+
+        jdbcTemplate.batchUpdate(
+                UPDATE_COMPANY_AND_ROLE,
+                args);
     }
 }
