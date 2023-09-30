@@ -36,6 +36,28 @@ import java.util.Optional;
  * <p>
  * Интеграция с Spring Data: @Repository часто используется в сочетании с Spring Data, что позволяет создавать
  * репозитории с помощью интерфейсов и автоматически создавать реализацию этих репозиториев Spring Data.
+ * <p></p>
+ * QuerydslPredicateExecutor - это интерфейс в Spring Data JPA, предоставляющий дополнительные методы для выполнения
+ * запросов с использованием предикатов Querydsl. Этот интерфейс расширяет стандартный JpaRepository и добавляет
+ * возможность выполнять запросы, используя предикаты, созданные с помощью библиотеки Querydsl.
+ * <p>
+ * QuerydslPredicateExecutor определяет следующие методы:
+ * <p>
+ * findAll(Predicate predicate): Выполняет запрос, используя указанный предикат, и возвращает список сущностей,
+ * удовлетворяющих этому предикату.
+ * <p>
+ * findOne(Predicate predicate): Выполняет запрос, используя указанный предикат, и возвращает одну сущность, которая
+ * соответствует этому предикату. Если сущности не найдены, возвращается null.
+ * <p>
+ * count(Predicate predicate): Выполняет запрос, используя указанный предикат, и возвращает количество сущностей,
+ * удовлетворяющих этому предикату.
+ * <p>
+ * exists(Predicate predicate): Проверяет наличие сущностей, удовлетворяющих указанному предикату. Возвращает true,
+ * если хотя бы одна сущность найдена, и false, если нет.
+ * <p>
+ * Эти методы позволяют выполнить запросы к базе данных с использованием динамических предикатов, что делает Spring
+ * Data JPA более гибким и мощным для работы с условиями поиска, которые могут меняться в зависимости от требований
+ * вашего приложения.
  */
 public interface UserRepository extends
         JpaRepository<User, Long>,
@@ -251,6 +273,6 @@ public interface UserRepository extends
             birth_date birthDate
             from users
             where company_id = :companyId
-            """ ,nativeQuery = true)
+            """, nativeQuery = true)
     List<PersonalInfoInterface> findAllByCompanyId(Integer companyId);
 }
