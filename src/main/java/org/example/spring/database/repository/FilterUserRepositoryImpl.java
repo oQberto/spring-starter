@@ -1,16 +1,16 @@
 package org.example.spring.database.repository;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.User;
+import org.example.spring.database.querydsl.QPredicates;
 import org.example.spring.dto.UserFilterDto;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.spring.database.entity.QUser.user;
 
 @RequiredArgsConstructor
 public class FilterUserRepositoryImpl implements FilterUserRepository {
@@ -19,24 +19,16 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
 
     @Override
     public List<User> findAllByFilter(UserFilterDto userFilterDto) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+        Predicate predicate = QPredicates.builder()
+                .add(userFilterDto.firstName(), user.firstName::containsIgnoreCase)
+                .add(userFilterDto.lastName(), user.lastName::containsIgnoreCase)
+                .add(userFilterDto.birthDate(), user.birthDate::before)
+                .build();
 
-        Root<User> user = criteria.from(User.class);
-        criteria.select(user);
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (userFilterDto.firstName() != null) {
-            predicates.add(criteriaBuilder.like(user.get("firstName"), userFilterDto.firstName()));
-        }
-        if (userFilterDto.lastName() != null) {
-            predicates.add(criteriaBuilder.like(user.get("lastName"), userFilterDto.lastName()));
-        }
-        if (userFilterDto.birthDate() != null) {
-            predicates.add(criteriaBuilder.lessThan(user.get("birthDate"), userFilterDto.birthDate()));
-        }
-        criteria.where(predicates.toArray(Predicate[]::new));
-
-        return entityManager.createQuery(criteria).getResultList();
+        return new JPAQuery<User>(entityManager)
+                .select(user)
+                .from(user)
+                .where(predicate)
+                .fetch();
     }
 }

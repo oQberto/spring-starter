@@ -36,11 +36,11 @@ class UserRepositoryTest {
     void checkCustomImplementation() {
         UserFilterDto filter = new UserFilterDto(
                 null,
-                "%ov%",
+                "ov",
                 LocalDate.now()
         );
         List<User> allByFilter = userRepository.findAllByFilter(filter);
-        System.out.println();
+        assertThat(allByFilter).hasSize(5);
     }
 
     @Test

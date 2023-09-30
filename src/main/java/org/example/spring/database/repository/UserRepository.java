@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.history.RevisionRepository;
 
 import java.time.LocalDate;
@@ -39,7 +40,8 @@ import java.util.Optional;
 public interface UserRepository extends
         JpaRepository<User, Long>,
         FilterUserRepository,
-        RevisionRepository<User, Long, Integer> {
+        RevisionRepository<User, Long, Integer>,
+        QuerydslPredicateExecutor<User> {
 
     /**
      * Тут используется HQL
