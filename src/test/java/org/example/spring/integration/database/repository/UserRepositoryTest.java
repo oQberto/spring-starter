@@ -1,12 +1,13 @@
-package org.example.spring.database.repository;
+package org.example.spring.integration.database.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.User;
 import org.example.spring.database.entity.enums.Role;
+import org.example.spring.database.repository.UserRepository;
 import org.example.spring.dto.PersonalInfo;
 import org.example.spring.dto.PersonalInfoInterface;
 import org.example.spring.dto.UserFilterDto;
-import org.example.spring.integration.annotation.IT;
+import org.example.spring.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +20,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@IT
 @RequiredArgsConstructor
-class UserRepositoryTest {
+class UserRepositoryTest extends IntegrationTestBase {
     private final UserRepository userRepository;
 
     @Test
@@ -106,7 +106,7 @@ class UserRepositoryTest {
     void checkFirstTop() {
         Optional<User> user = userRepository.findFirstByOrderByIdDesc();
         assertTrue(user.isPresent());
-        user.ifPresent(user1 -> assertEquals(5L, user1.getId()));
+        user.ifPresent(user1 -> assertEquals(6L, user1.getId()));
     }
 
     @Test

@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.Company;
 import org.example.spring.database.repository.CompanyRepository;
-import org.example.spring.integration.annotation.IT;
+import org.example.spring.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -14,9 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@IT
 @RequiredArgsConstructor
-class CompanyRepositoryTest {
+class CompanyRepositoryTest extends IntegrationTestBase {
 
     private final EntityManager entityManager;
     private final CompanyRepository companyRepository;
