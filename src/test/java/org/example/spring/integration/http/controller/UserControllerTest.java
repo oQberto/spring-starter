@@ -36,7 +36,7 @@ class UserControllerTest extends IntegrationTestBase {
                         .param(lastName, "lastname")
                         .param(role, "ADMIN")
                         .param(companyId, "1")
-
+                        .param(birthDate, "2000-01-01")
                 )
                 .andExpectAll(
                         status().is3xxRedirection(),

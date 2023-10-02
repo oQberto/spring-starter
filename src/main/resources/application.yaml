@@ -35,12 +35,15 @@ logging:
   file:
     name: spring-starter.log
     path: /
-# Подключение к БД. Стандартный пул - HikariCP.
+# Настройки spring
 spring:
   mvc:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+    format:
+      date: iso
+# Подключение к БД. Стандартный пул - HikariCP.
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
