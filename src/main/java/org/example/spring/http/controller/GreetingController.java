@@ -1,23 +1,37 @@
 package org.example.spring.http.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.spring.database.entity.enums.Role;
 import org.example.spring.dto.UserReadDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1")
 @SessionAttributes({"user"})
 public class GreetingController {
 
+    /**
+     * Метод будет вызываться каждый раз, на каждый запрос.
+     * @return
+     */
+    @ModelAttribute("roles")
+    public List<Role> roles() {
+        return Arrays.asList(Role.values());
+    }
+
     @GetMapping(value = "/hello")
-    public ModelAndView hello(ModelAndView modelAndView){
-        modelAndView.setViewName("greeting/hello");
+    public String hello(Model model,
+                        @ModelAttribute("userReadDto") UserReadDto userReadDto){
 
         // установка атрибута
-        modelAndView.addObject("user", new UserReadDto(1L, "username"));
-        return modelAndView;
+        model.addAttribute("user", new UserReadDto(1L, "username"));
+        return "greeting/hello";
     }
 
 //        @RequestMapping(
@@ -35,15 +49,19 @@ public class GreetingController {
         return modelAndView;
     }
 
+    /**
+     * Если нам надо вернуть просто статичную страницу, то вместо ModelAndView мы можем вернуть String.
+     * @param modelAndView
+     * @param user
+     * @return
+     */
 //        @RequestMapping(
 //            value = "/bye",
 //            method = RequestMethod.GET
 //    )
     @GetMapping(value = "/bye")
-    public ModelAndView bye(ModelAndView modelAndView,
+    public String bye(ModelAndView modelAndView,
                             @SessionAttribute("user") UserReadDto user) {
-        modelAndView.setViewName("greeting/bye");
-
-        return modelAndView;
+        return "greeting/bye";
     }
 }
