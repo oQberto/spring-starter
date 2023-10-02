@@ -25,7 +25,9 @@ public class CompanyServiceIT {
         Optional<CompanyReadDto> actualResult = companyService.findById(COMPANY_ID);
         assertTrue(actualResult.isPresent());
 
-        CompanyReadDto expectedResult = new CompanyReadDto(COMPANY_ID);
+        CompanyReadDto expectedResult = CompanyReadDto.builder()
+                .id(COMPANY_ID)
+                .build();
         actualResult.ifPresent(actual -> assertEquals(expectedResult, actualResult.get()));
     }
 

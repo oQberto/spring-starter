@@ -30,7 +30,7 @@ public class GreetingController {
                         @ModelAttribute("userReadDto") UserReadDto userReadDto){
 
         // установка атрибута
-        model.addAttribute("user", new UserReadDto(1L, "username"));
+//        model.addAttribute("user", new UserReadDto(1L, "username"));
         return "greeting/hello";
     }
 
