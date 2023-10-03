@@ -3,6 +3,7 @@ package org.example.spring.http.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.enums.Role;
 import org.example.spring.dto.UserCreateEditDto;
+import org.example.spring.dto.UserFilterDto;
 import org.example.spring.service.CompanyService;
 import org.example.spring.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -89,8 +90,8 @@ public class UserController {
      * @return
      */
     @GetMapping
-    public String findAll(Model model) {
-        model.addAttribute("users", userService.findAll());
+    public String findAll(Model model, UserFilterDto filter) {
+        model.addAttribute("users", userService.findAll(filter));
         return "user/users";
     }
 

@@ -74,9 +74,9 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
     @Override
     public List<User> findAllByFilter(UserFilterDto userFilterDto) {
         Predicate predicate = QPredicates.builder()
-                .add(userFilterDto.firstName(), user.firstName::containsIgnoreCase)
-                .add(userFilterDto.lastName(), user.lastName::containsIgnoreCase)
-                .add(userFilterDto.birthDate(), user.birthDate::before)
+                .add(userFilterDto.getFirstName(), user.firstName::containsIgnoreCase)
+                .add(userFilterDto.getLastName(), user.lastName::containsIgnoreCase)
+                .add(userFilterDto.getBirthDate(), user.birthDate::before)
                 .build();
 
         return new JPAQuery<User>(entityManager)

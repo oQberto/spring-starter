@@ -79,6 +79,6 @@ public class QPredicates {
     }
 
     public Predicate build() {
-        return ExpressionUtils.anyOf(predicates);
+        return ExpressionUtils.allOf(predicates);
     }
 }

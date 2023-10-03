@@ -4,6 +4,7 @@ package org.example.spring.service;
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.repository.UserRepository;
 import org.example.spring.dto.UserCreateEditDto;
+import org.example.spring.dto.UserFilterDto;
 import org.example.spring.dto.UserReadDto;
 import org.example.spring.mapper.UserCreateEditMapper;
 import org.example.spring.mapper.UserReadMapper;
@@ -63,6 +64,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateEditMapper userCreateEditMapper;
+
+    public List<UserReadDto> findAll(UserFilterDto filter) {
+        return userRepository.findAllByFilter(filter).stream()
+                .map(userReadMapper::map)
+                .toList();
+    }
 
     public List<UserReadDto> findAll() {
         return userRepository.findAll().stream()

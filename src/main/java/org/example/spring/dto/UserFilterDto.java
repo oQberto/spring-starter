@@ -1,8 +1,12 @@
 package org.example.spring.dto;
 
+import lombok.Value;
+
 import java.time.LocalDate;
 
-public record UserFilterDto(String firstName,
-                            String lastName,
-                            LocalDate birthDate) {
+@Value
+public class UserFilterDto {
+    String firstName;
+    String lastName;
+    LocalDate birthDate;
 }
