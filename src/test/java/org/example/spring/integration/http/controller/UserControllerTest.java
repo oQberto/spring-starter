@@ -11,6 +11,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * {@code @AutoConfigureMockMvc} - это аннотация в Spring Boot, которая используется для автоматической настройки
+ * объекта MockMvc. MockMvc - это класс из Spring Test, который предоставляет удобные средства для тестирования веб-приложений
+ * Spring MVC без реального запуска веб-сервера. Это позволяет проводить интеграционное тестирование
+ * контроллеров и обработчиков запросов без реальных HTTP-запросов и ответов.
+ * <p>
+ * Основные характеристики @AutoConfigureMockMvc:
+ * <p>
+ * Автоматическая настройка MockMvc: Аннотация @AutoConfigureMockMvc позволяет автоматически настраивать объект
+ * MockMvc в контексте вашего приложения Spring Boot. Это делает объект MockMvc доступным для использования в ваших тестовых классах.
+ * <p>
+ * Удобство тестирования: С MockMvc вы можете выполнять HTTP-запросы к вашим контроллерам и проверять полученные
+ * ответы, не запуская реальный веб-сервер. Это упрощает написание тестов и ускоряет их выполнение.
+ * <p>
+ * Поддержка моков и заглушек: Вы можете использовать MockMvc в сочетании с моками и заглушками для тестирования
+ * контроллеров в изолированной среде.
+ */
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
 class UserControllerTest extends IntegrationTestBase {
