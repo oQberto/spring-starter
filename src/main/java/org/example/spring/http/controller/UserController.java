@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * {@code @Controller} - это аннотация в Spring Framework, которая используется для пометки класса как компонента, который
@@ -135,6 +136,16 @@ public class UserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/registration")
+    public String registration(Model model,
+                               @ModelAttribute("user") UserCreateEditDto user) {
+        model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values());
+        model.addAttribute("companies", companyService.findAll());
+
+        return "user/registration";
+    }
+
     /**
      * {@code @PostMapping} - это аннотация в Spring Framework, которая предоставляет удобный способ настройки метода
      * контроллера для обработки HTTP POST-запросов. Эта аннотация является частью аннотационного подхода в Spring MVC
@@ -167,7 +178,12 @@ public class UserController {
      */
     @PostMapping
 //    @ResponseStatus(HttpStatus.CREATED)
-    public String create(UserCreateEditDto user) {
+    public String create(@ModelAttribute UserCreateEditDto user,
+                         RedirectAttributes redirectAttributes) {
+//        if (true) {
+//            redirectAttributes.addFlashAttribute("user", user);
+//            return "redirect:/users/registration";
+//        }
         return "redirect:/users/" + userService.create(user).getId();
     }
 
