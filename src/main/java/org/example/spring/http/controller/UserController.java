@@ -1,7 +1,9 @@
 package org.example.spring.http.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.spring.database.entity.enums.Role;
 import org.example.spring.dto.UserCreateEditDto;
+import org.example.spring.service.CompanyService;
 import org.example.spring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -58,6 +60,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final CompanyService companyService;
 
     /**
      * {@code @GetMapping} - это аннотация в Spring Framework, которая предоставляет удобный способ настройки метода контроллера
@@ -119,13 +122,15 @@ public class UserController {
      * @param id
      * @return
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String findById(Model model,
                            @PathVariable("id") Long id) {
         return userService.findById(id)
                 .map(user -> {
                     model.addAttribute("user", user);
-                    return "users/user";
+                    model.addAttribute("roles", Role.values());
+                    model.addAttribute("companies", companyService.findAll());
+                    return "user/user";
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

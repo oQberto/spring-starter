@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.spring.database.repository.CompanyRepository;
 import org.example.spring.dto.CompanyReadDto;
 import org.example.spring.listener.entity.EntityEvent;
+import org.example.spring.mapper.CompanyReadMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.example.spring.listener.entity.AccessType.READ;
@@ -60,20 +62,25 @@ import static org.example.spring.listener.entity.AccessType.READ;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CompanyService {
 
     private final UserService userService;
     private final CompanyRepository companyRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final CompanyReadMapper companyReadMapper;
 
     public Optional<CompanyReadDto> findById(Integer id) {
         return companyRepository.findById(id)
                 .map(entity -> {
                     applicationEventPublisher.publishEvent(new EntityEvent(entity, READ));
-                    return CompanyReadDto.builder()
-                            .id(entity.getId())
-                            .build();
+                    return companyReadMapper.map(entity);
                 });
+    }
+
+    public List<CompanyReadDto> findAll() {
+        return companyRepository.findAll().stream()
+                .map(companyReadMapper::map)
+                .toList();
     }
 }

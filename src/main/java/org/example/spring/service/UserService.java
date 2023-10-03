@@ -92,6 +92,7 @@ public class UserService {
                 .map(userReadMapper::map);
     }
 
+    @Transactional
     public boolean remove(Long id) {
         return userRepository.findById(id)
                 .map(entity -> {
