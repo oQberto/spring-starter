@@ -1,18 +1,24 @@
 package org.example.spring.service;
 
 
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.example.spring.database.querydsl.QPredicates;
 import org.example.spring.database.repository.UserRepository;
 import org.example.spring.dto.UserCreateEditDto;
 import org.example.spring.dto.UserFilterDto;
 import org.example.spring.dto.UserReadDto;
 import org.example.spring.mapper.UserCreateEditMapper;
 import org.example.spring.mapper.UserReadMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.example.spring.database.entity.QUser.user;
 
 /**
  * Аннотация @Transactional в Spring позволяет настраивать различные параметры для управления транзакциями.
@@ -65,10 +71,15 @@ public class UserService {
     private final UserReadMapper userReadMapper;
     private final UserCreateEditMapper userCreateEditMapper;
 
-    public List<UserReadDto> findAll(UserFilterDto filter) {
-        return userRepository.findAllByFilter(filter).stream()
-                .map(userReadMapper::map)
-                .toList();
+    public Page<UserReadDto> findAll(UserFilterDto filter, Pageable pageable) {
+        Predicate predicate = QPredicates.builder()
+                .add(filter.getFirstName(), user.firstName::containsIgnoreCase)
+                .add(filter.getLastName(), user.lastName::containsIgnoreCase)
+                .add(filter.getBirthDate(), user.birthDate::before)
+                .build();
+
+        return userRepository.findAll(predicate, pageable)
+                .map(userReadMapper::map);
     }
 
     public List<UserReadDto> findAll() {

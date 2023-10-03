@@ -5,19 +5,27 @@
     <title>Login</title>
 </head>
 <body>
-<form action="/users">
+<form action="/users" th:object="${filter}">
     <label for="firstName">FirstName:
-        <input id="firstName" type="text" name="firstName">
+        <input id="firstName" type="text" name="firstName" th:value="*{firstName}">
     </label><br>
     <label for="lastName">LastName:
-        <input id="lastName" type="text" name="lastName">
+        <input id="lastName" type="text" name="lastName" th:value="*{lastName}">
     </label><br>
     <label for="birthDate">BirthDate:
-        <input id="birthDate" type="date" name="birthDate">
+        <input id="birthDate" type="date" name="birthDate" th:value="*{birthDate}">
     </label><br>
+    <div>
+        <label for="page">Page:
+            <input id="page" type="number" name="page" th:value="${users.metadata.page}">
+        </label><br>
+        <label for="size">Size:
+            <input id="size" type="number" name="size" th:value="${users.metadata.size}">
+        </label><br>
+    </div>
     <button type="submit">Filter</button>
 </form>
-<div th:each="user: ${users}">
+<div th:each="user: ${users.content}">
     <a th:href="@{'/users/' + ${user.id}}" th:text="|${user.id}. ${user.username}|">User</a>
 </div>
 </body>
