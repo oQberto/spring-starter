@@ -1,7 +1,6 @@
 package org.example.spring.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
@@ -32,9 +31,7 @@ public class UserCreateEditDto {
 
     String lastName;
 
-    @NotNull
     Role role;
 
-    @NotNull
     Integer companyId;
 }
