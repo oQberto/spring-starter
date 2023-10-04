@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * вы можете возвращать специфичные сообщения об ошибке или устанавливать определенные HTTP-статусы.
  */
 @Slf4j
-@ControllerAdvice
+@ControllerAdvice(basePackages = "org.example.spring.http.controller")
 public class ControllerExceptionHandler /*extends ResponseEntityExceptionHandler*/ {
 
     /**
