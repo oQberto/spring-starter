@@ -1,5 +1,6 @@
 package org.example.spring.http.controller;
 
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.example.spring.database.entity.enums.Role;
 import org.example.spring.dto.PageResponse;
@@ -8,6 +9,8 @@ import org.example.spring.dto.UserFilterDto;
 import org.example.spring.dto.UserReadDto;
 import org.example.spring.service.CompanyService;
 import org.example.spring.service.UserService;
+import org.example.spring.validation.group.CreateAction;
+import org.example.spring.validation.group.UpdateAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -189,7 +192,7 @@ public class UserController {
      */
     @PostMapping
 //    @ResponseStatus(HttpStatus.CREATED)
-    public String create(@ModelAttribute @Validated UserCreateEditDto user,
+    public String create(@ModelAttribute @Validated({Default.class, CreateAction.class}) UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -232,7 +235,7 @@ public class UserController {
     //    @PutMapping("/{id}")
     @PostMapping("/{id}/update")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute("user") @Validated UserCreateEditDto user) {
+                         @ModelAttribute("user") @Validated({Default.class, UpdateAction.class}) UserCreateEditDto user) {
         return userService.update(id, user)
                 .map(it -> "redirect:/users/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

@@ -6,12 +6,15 @@ import jakarta.validation.constraints.Size;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
 import org.example.spring.database.entity.enums.Role;
+import org.example.spring.validation.UserInfo;
+import org.example.spring.validation.group.CreateAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Value
 @FieldNameConstants
+@UserInfo(groups = CreateAction.class)
 public class UserCreateEditDto {
     @Email
     String username;
@@ -24,11 +27,9 @@ public class UserCreateEditDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birthDate;
 
-    @NotNull
     @Size(min = 3, max = 64)
     String firstName;
 
-    @NotNull
     String lastName;
 
     @NotNull
