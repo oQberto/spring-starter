@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -19,9 +19,8 @@
         <input id="firstName" type="text" name="firstName" th:value="*{firstName}">
     </label><br>
     <div th:each="role: ${roles}">
-        <label th:for="${role}" th:text="${role}">Role name:
             <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
-        </label>
+            <label th:for="${role}" th:text="${role}">Role name</label>
     </div>
     <div>
         <label for="company">Company:
@@ -36,5 +35,8 @@
     </div>
     <button type="submit">Register</button>
 </form>
+<div th:if="${errors}">
+    <p th:each="error: ${errors}" th:text="${error.defaultMessage}">ErrorMessage</p>
+</div>
 </body>
 </html>

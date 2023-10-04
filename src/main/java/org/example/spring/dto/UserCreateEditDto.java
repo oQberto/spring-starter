@@ -1,5 +1,8 @@
 package org.example.spring.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
 import org.example.spring.database.entity.enums.Role;
@@ -10,6 +13,7 @@ import java.time.LocalDate;
 @Value
 @FieldNameConstants
 public class UserCreateEditDto {
+    @Email
     String username;
 
     /**
@@ -19,8 +23,17 @@ public class UserCreateEditDto {
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birthDate;
+
+    @NotNull
+    @Size(min = 3, max = 64)
     String firstName;
+
+    @NotNull
     String lastName;
+
+    @NotNull
     Role role;
+
+    @NotNull
     Integer companyId;
 }
