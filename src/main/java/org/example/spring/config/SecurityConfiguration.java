@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -26,8 +25,7 @@ public class SecurityConfiguration {
                                 .loginPage("/login")
                                 .defaultSuccessUrl("/users")
                                 .permitAll()
-                )
-                .httpBasic(withDefaults());
+                );
         return http.build();
     }
 }
