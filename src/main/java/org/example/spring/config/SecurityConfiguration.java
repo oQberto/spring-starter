@@ -22,6 +22,12 @@ public class SecurityConfiguration {
                                 .anyRequest()
                                 .authenticated()
                 )
+                .logout(
+                        logout -> logout
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login")
+                                .deleteCookies("JSESSIONID")
+                )
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/login")
