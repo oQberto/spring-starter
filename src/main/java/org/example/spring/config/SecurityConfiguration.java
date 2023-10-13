@@ -16,11 +16,18 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .anyRequest()
-                                .authenticated()
+                                .requestMatchers(
+                                        "login",
+                                        "/users/registration",
+                                        "/v3/api/docs/**",
+                                        "/swagger-ui/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/users/{\\d+}/delete").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .logout(
                         logout -> logout
@@ -32,7 +39,6 @@ public class SecurityConfiguration {
                         formLogin -> formLogin
                                 .loginPage("/login")
                                 .defaultSuccessUrl("/users")
-                                .permitAll()
                 );
         return http.build();
     }
