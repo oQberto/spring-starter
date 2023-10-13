@@ -1,6 +1,7 @@
 package org.example.spring.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
@@ -17,6 +18,9 @@ import java.time.LocalDate;
 public class UserCreateEditDto {
     @Email
     String username;
+
+    @NotBlank(groups = CreateAction.class)
+    String password;
 
     /**
      * Аннотация используется для конвертации дат в тестах,
