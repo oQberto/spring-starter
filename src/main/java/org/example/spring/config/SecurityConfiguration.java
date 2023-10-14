@@ -28,7 +28,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/users/\\d+/remove").hasRole("ADMIN")
                         .anyRequest().authenticated()
-
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout

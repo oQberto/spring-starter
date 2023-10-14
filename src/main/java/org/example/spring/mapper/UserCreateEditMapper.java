@@ -19,35 +19,30 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User> {
 
     @Override
     public User map(UserCreateEditDto fromObject, User toObject) {
-        return copy(fromObject, toObject);
+        copy(fromObject, toObject);
+        return toObject;
     }
 
-    private User copy(UserCreateEditDto dto, User user) {
-        user.setUsername(user.getUsername());
-        user.setFirstName(user.getFirstName());
-        user.setLastName(user.getLastName());
-        user.setBirthDate(user.getBirthDate());
-        user.setRole(user.getRole());
-        user.setCompany(getCompany(user.getCompany().getId()));
+    @Override
+    public User map(UserCreateEditDto object) {
+        User user = new User();
+        copy(object, user);
+
+        return user;
+    }
+
+    private void copy(UserCreateEditDto dto, User user) {
+        user.setUsername(dto.getUsername());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setBirthDate(dto.getBirthDate());
+        user.setRole(dto.getRole());
+        user.setCompany(getCompany(dto.getCompanyId()));
 
         Optional.ofNullable(dto.getPassword())
                 .filter(StringUtils::hasText)
                 .map(passwordEncoder::encode)
                 .ifPresent(user::setPassword);
-
-        return user;
-    }
-
-    @Override
-    public User map(UserCreateEditDto object) {
-        return User.builder()
-                .username(object.getUsername())
-                .firstName(object.getFirstName())
-                .lastName(object.getLastName())
-                .birthDate(object.getBirthDate())
-                .role(object.getRole())
-                .company(getCompany(object.getCompanyId()))
-                .build();
     }
 
     public Company getCompany(Integer companyId) {
