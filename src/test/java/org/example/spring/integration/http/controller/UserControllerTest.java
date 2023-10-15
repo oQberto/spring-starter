@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.spring.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.example.spring.dto.UserCreateEditDto.Fields.*;
@@ -30,8 +31,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
+@WithMockUser(
+        username = "test@gmail.com",
+        password = "testPassword",
+        authorities = {
+                "ADMIN",
+                "USER"
+        }
+)
 class UserControllerTest extends IntegrationTestBase {
     private final MockMvc mockMvc;
+
+    //Вариант тестирования №1. Второй вариант - через аннотацию, как в аннотации выше
+//    @BeforeEach
+//    void init() {
+//        List<GrantedAuthority> roles = Arrays.asList(Role.USER, Role.ADMIN);
+//        User testUser = new User("testUsername@gmail.com", "testPassword", roles);
+//
+//        TestingAuthenticationToken testingAuthenticationToken = new TestingAuthenticationToken(testUser, testUser.getPassword(), roles);
+//
+//        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+//        securityContext.setAuthentication(testingAuthenticationToken);
+//        SecurityContextHolder.setContext(securityContext);
+//    }
 
     @Test
     void findAll() throws Exception {

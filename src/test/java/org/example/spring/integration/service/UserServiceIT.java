@@ -58,6 +58,7 @@ public class UserServiceIT extends IntegrationTestBase {
     void create() {
         UserCreateEditDto userDto = new UserCreateEditDto(
                 "test@gamail.com",
+                "123",
                 LocalDate.now(),
                 "FTestName",
                 "LTestName",
@@ -78,6 +79,7 @@ public class UserServiceIT extends IntegrationTestBase {
     void update() {
         UserCreateEditDto userDto = new UserCreateEditDto(
                 "test@gamail.com",
+                "123",
                 LocalDate.now(),
                 "FTestName",
                 "LTestName",
